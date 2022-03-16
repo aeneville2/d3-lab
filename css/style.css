@@ -1,0 +1,147 @@
+/*Stylesheet by Aspen Neville, 2022*/
+.heading {
+    text-align: center;
+    padding: 5;
+}
+.introText {
+    text-align: center;
+    padding: 3;
+    font-weight: normal;
+    width: 80%;
+    margin-left: 10%;
+}
+.source {
+    padding: 1;
+    font-style: italic;
+    font-size: 0.75em;
+    text-align: center;
+    width: 80%;
+    margin-left: 10%;
+}
+.map {
+    border: medium solid #999;
+    margin: 10px 0 0 20px;
+}
+
+.states {
+    fill: #fff;
+    fill-opacity: 0;
+    stroke: #000;
+    stroke-width: 5px;
+}
+
+.gratLines {
+    fill: none;
+    stroke: #999;
+    stroke-width: 1px;
+}
+
+.gratBackground {
+    fill: #D5E3FF;
+}
+
+.counties {
+    /*fill: #fff;*/
+    stroke: #000;
+    stroke-width: 0.5px;
+    stroke-opacity: 0.2;
+}
+
+.chart {
+    background-color: rgba(128,128,128,0.2);
+    border: medium solid #999;
+    float: right;
+    margin: 10px 20px 0 0;
+    z-index:4;
+}
+.treeMapContainer {
+    background-color: rgba(128,128,128,0.2);
+    border: medium solid #999;
+    float: right;
+    margin: 10px 20px 0 0;
+    z-index:4;
+}
+
+.chartTitle {
+    font-family: sans-serif;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.chartBackground {
+    fill: #ccc;
+}
+
+.chartFrame {
+    fill: none;
+    stroke: #999;
+    stroke-width: 3px;
+    shape-rendering: crispEdges;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #999;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-family: sans-serif;
+    font-size: 0.8em;
+    fill: #999;
+}
+
+.chartTitle {
+    font-size: 0.75em;
+}
+
+.dropdown {
+    position: absolute;
+    top: 220px;
+    left: 40px;
+    z-index: 5;
+    font-family: sans-serif;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 2px;
+    border: 1px solid #999;
+    box-shadow: 2px 2px 4px #999;
+}
+
+option {
+    font-weight: normal;
+}
+.legendBox{
+    width: 100%
+}
+.legendContainer{
+    position: relative;
+    z-index: 10;
+    height: auto;
+    width: 80%;
+    font-size: 0.5em;
+}
+
+.toolTip{
+    border: solid #000;
+    border-width: 1px;
+	width: auto;
+    /*float: right;*/
+    right:0;
+    z-index: 15;
+    text-align: center;
+    position: absolute;
+}
+
+.toolTipText{
+    background-color: #004b8d;
+}
+
+.zoomTooltip {
+    float: right;
+}
+
+.zoom {
+    float: left;
+}

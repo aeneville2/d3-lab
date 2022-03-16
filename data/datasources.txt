@@ -1,0 +1,5 @@
+Data Sources
+
+Estimated Use of Water in the United States County-Level Data for 2015 https://www.sciencebase.gov/catalog/item/get/5af3311be4b0da30c1b245d8
+
+Natural Earth counties https://www.naturalearthdata.com/downloads/10m-cultural-vectors/
