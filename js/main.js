@@ -29,10 +29,11 @@
 		.attr("class","introText")
 		.html("<p>Every 5 years, the United States Geological Survey publishes data on the nation's water use*" + 
 		". The map displays the county-level data for water withdrawals (in Mgal/day) per thousand people from the 2015 report, illustrating which counties are withdrawing the most water compared to their population size." +
-		" The default is total withdrawals (Mgal/day) per thousand people. Other water-use categories are included: public supply, domestic, industrial, irrigation, livestock, mining, aquaculture, and thermoelectric." +
-		" The scatterplot allows a comparison of correlation between withdrawals and population size for each county. Zooming and panning are enabled on both the map and scatterplot." + 
+		" The default is total withdrawals (Mgal/day) per thousand people. Other water-use categories can be selected from the dropdown menu: public supply, domestic, industrial, irrigation, livestock, mining, aquaculture, and thermoelectric." +
+		" The scatterplot allows a comparison of correlation between withdrawals and population size for each county. Zooming and panning are enabled on both the map and scatterplot. Hover over a county or dot to view additional information." + 
 		" To view the source data, click <a href='https://doi.org/10.5066/F7TB15V5'>here.</a></p>");
 
+	//create text for source of data
 	var source = d3.select("body")
 		.append("p")
 		.attr("class","source")
@@ -61,6 +62,7 @@
 		.attr("height", chartHeight)
 		.attr("transform", translate);
 
+	//g element for chart
 	var chartG = chart.append("g")
 		.attr("transform",translate)
 		.attr("class","chartG")
@@ -107,7 +109,7 @@
 		//create div container for the map
 		var mapContainer = d3.select("body")
 			.append("div")
-			.attr("class","mapContainer")
+			.attr("class","mapContainer");
 
 		//create zoom variable and functionS
 		var zoomMap = d3.zoom()
@@ -135,16 +137,16 @@
 
 		//create group for the map elements
 		var mapG = map.append("g")
-			.attr("class","mapG")
-			.on("mouseover",function(d){
+			.attr("class","mapG");
+			/*.on("mouseover",function(d){
 				d3.selectAll(".zoomTooltip").style("opacity",1)
 			})
 			.on("mouseleave",function(d){
 				d3.selectAll(".zoomTooltip").style("opacity",0)
-			})
+			})*/
 
 		//create zoom buttons
-		//used ADD SOURCE HERE for help with coding!
+		//used https://www.d3indepth.com/zoom-and-pan and https://www.geeksforgeeks.org/d3-js-zoom-scaleby-function/ for help with coding!
 		var zoomButton = mapContainer.append("button")
 			.style("background-color","#fff")
 			.attr("class","zoom")
@@ -173,7 +175,7 @@
 			.defer(d3.json, "data/counties_us.topojson") //load choropleth spatial data
 			.await(callback)
 
-		function callback(error,csvData, statesUS,countiesUS){
+		function callback(error,csvData,statesUS,countiesUS){
 			//place graticule on the map
 			setGraticule(mapG,path);
 
@@ -188,12 +190,10 @@
 			var stateOutlines = mapG.append("path")
 				.datum(states)
 				.attr("class","states")
-				.attr("d",path)
-				//.style("stroke-width","5px");
+				.attr("d",path);
 
 			//join csv data to geoJSON enumeration units
 			countiesJoined = joinData(counties, csvData);
-			console.log("countiesJoined: ",countiesJoined);
 
 			//create the color scale
 			var colorScale = makeColorScale(csvData);
@@ -204,6 +204,7 @@
 			//add cooordinated visualization to the map
 			setChart(csvData, colorScale);
 
+			//add dropdown list to the map
 			createDropdown(csvData);
 		}
 	}
@@ -215,8 +216,7 @@
 		var gratBackground = map.append("path")
 			.datum(graticule.outline()) //bind graticule background
 			.attr("class","gratBackground") //assign class for styling
-			.attr("d", path) //project graticule
-			
+			.attr("d", path); //project graticule	
 
 		var gratLines = map.selectAll(".gratlines") //select graticule elements that will be created
 			.data(graticule.lines()) //bind graticule lines to each element to be created
@@ -226,6 +226,7 @@
 			.attr("d", path); //project graticule lines
 			
 	}
+	//function to remove the 0 at the front of the FIPS code in the topoJSON data if it has leading zero
 	function codeLocal(props){
 		if (props.CODE_LOCAL.startsWith("0")) {return props.CODE_LOCAL.substr(1)}
 		else{return props.CODE_LOCAL};
@@ -239,7 +240,7 @@
 			//loop through geojson counties to find correct county
 			for (var a=0; a<data.length; a++){
 				var geojsonProps = data[a].properties; //the current county geojson properties
-				var geojsonKey = codeLocal(geojsonProps)//the geojson primary key
+				var geojsonKey = codeLocal(geojsonProps);//the geojson primary key
 
 				//where primary keys match, transfer csv data to get geojson properties object
 				if (geojsonKey == csvKey){
@@ -251,8 +252,7 @@
 				};
 			};
 		};
-		return data;
-		
+		return data;	
 	};
 	//function to create color scale generator
 	function makeColorScale(data){
@@ -278,7 +278,6 @@
 
 		//remove first value from domain array to create class breakpoints
 		domainArray.shift();
-		console.log("domainArray after shift:",domainArray)
 
 		//assign array of expressed values as scale domain
 		colorScale.domain(domainArray);
@@ -298,25 +297,15 @@
 			.orient('horizontal')
 			.scale(colorScale)
 			.labels(d3.legendHelpers.thresholdLabels)
-			.labelFormat(".4f")
-		/* var noValueLegend = d3.legendColor()
-			.shapeWidth(100)
-			.orient('horizontal')
-			.labels('No Value')
-			.scale("#CCC") */
+			.labelFormat(".4f");
 		//create containers for the legend in the body of the web page and call the legend variable
 		var legendBox = d3.select("body")
 			.append("svg")
-			.attr("class","legendBox")
+			.attr("class","legendBox");
 		var legendContainer = d3.select(".legendBox")
 			.append("g")
 			.attr("class","legendContainer")
-			.call(legend)
-		/* var noValueContainer = d3.select(".legendBox")
-			.append("g")
-			.attr("class","noValueContainer")
-			.call(noValueLegend) */
-			
+			.call(legend);	
 	}
 	//function to test for data value and return color
 	function choropleth(props, colorScale){
@@ -347,17 +336,20 @@
 		//add style descriptor to each path
 		var desc = countyShapes.append("desc")
 			.text('{"stroke":"#000","stroke-width":"0.5px","stroke-opacity":0.2}');
-	}
+	};
 
 	//function to create coordinated scatterplot
 	//used example code from https://www.d3-graph-gallery.com/graph/scatter_basic.html
 	function setChart(csvData, colorScale) {
+		//create SVG for the scatterplot dots
 		var dotsSVG = chartG.append("svg")
 			.attr("class","dotsSVG")
 			.attr("width",chartInnerWidth)
-			.attr("height",chartHeight)
+			.attr("height",chartHeight);
+		//create g container to house the dots within the dots SVG
 		var dotsG = dotsSVG.append("g")
-			.attr("class","dotsG")
+			.attr("class","dotsG");
+		//create a dot for each county
  		var dots = dotsG.selectAll(".dots")
 			.data(csvData)
 			.enter()
@@ -376,6 +368,7 @@
 		var desc = dots.append("desc")
 			.text('{"stroke":"black","stroke-width":"0.5"}');
 
+		//function to update the chart based on the current attribute
 		updateChart(csvData,expressed2,colorScale);
 
 		//create a text element for the chart title
@@ -384,15 +377,6 @@
 			.attr("y",20)
 			.attr("class","chartTitle")
 			.text("Total Population (thousands) vs. Total Withdrawals");
-
-		/*var xLabel = chart.append("text")
-				.attr("class","xLabel")
-				.attr("x",chartWidth/2)
-				.attr("y",20)
-		var yLabel = chart.append("text")
-				.attr("class","yLabel")
-				.attr("y", -30)
-				.attr("x",-10 -chartHeight/2 + 20)*/
 	};
 	
 	function createDropdown(csvData){
@@ -409,8 +393,6 @@
 			.attr("class","titleOption")
 			.attr("disabled","true")
 			.text("Select Water-use Category");
-
-		//var data = attrArray.shift();
 
 		//add attribute name options
 		var attrOptions = dropdown.selectAll("attrOptions")
@@ -439,14 +421,13 @@
 				return choropleth(d.properties,colorScale)
 			});
 
-		//var dots = d3.selectAll(".circle");
+		//update the scatterplot dots to match the new expressed variable
 		updateChart(csvData,attribute,colorScale);
 	};
+
 	//function to update the scatterplot circles and scatterplot title when the attributes change
 	function updateChart(csvData, attribute, colorScale){
-
-
-
+		//select all of the dots and update the values and fill color based on expressed attribute
 		d3.selectAll("circle")
 			.attr("cx", function(d) {return x(d[expressed1]);})
 			.attr("cy", function(d) {return y(d[attribute]);})
@@ -456,14 +437,8 @@
 			.transition()
 			.duration(1000);
 
+		//update the chart title based on the expressed y attribute
 		var name = attrArray.indexOf(attribute);
-
-		/*var xLabel = d3.select(".xLabel")
-			.text("Total Population (thousands)");
-
-		var yLabel = d3.select(".yLabel")
-			.text(attrNames[name]);*/
-
 		var chartTitle = d3.select(".chartTitle")
 			.text("Total Population (Thousands) vs. " + attrNames[name]);
 	};
@@ -476,52 +451,49 @@
 		.attr("class","toolTip");
 	var toolTipText = d3.selectAll(".toolTip")
 		.append("span")
-		.attr("class","toolTipText")
+		.attr("class","toolTipText");
 
-	//when a mouseover event occurs then change the tooltip to be visible and highlight the county/dot
+	//when a mouseover event occurs then change the tooltip to be visible and highlight the county
 	var mouseover = function(d){
-		toolTip.style("opacity",1)
-		toolTipText.html(this.FIPS)
-		//highlight(object1)
+		toolTip.style("opacity",1);
+		toolTipText.html(this.FIPS);
 		d3.select(this)
 			.style("stroke","blue")
 			.style("stroke-width","3px")
-			.style("stroke-opacity",1)
-		var object = d3.select(this)
-		console.log("county",object) 
-		var id = d.properties.FIPS
+			.style("stroke-opacity",1);
+
+		//select the corresponding dot in the scatterplot and highlight it
+		var id = d.properties.FIPS;
 		d3.selectAll(".dots." + id)
 			.style("stroke","blue")
 			.style("stroke-width","3px")
-			.style("stroke-opacity",1)
-		console.log("dots",id);
-	}
+			.style("stroke-opacity",1);
+	};
+	//when a mouseover event occurs on the chart, highlight that dot and make the tool tip visible
 	var mouseoverChart = function(d){
 		toolTip.style("opacity",1)
 		toolTipText.html(this.FIPS)
 		d3.select(this)
 			.style("stroke","blue")
 			.style("stroke-width","3px")
-			.style("stroke-opacity",1)
-		var object = d3.select(this)
-		console.log("object",object)
+			.style("stroke-opacity",1);
+
+		//select the corresponding county from the map and highlight it
 		var id = "US" + d.FIPS
 		d3.selectAll(".counties." + id)
 			.style("stroke","blue")
 			.style("stroke-width","3px")
-			.style("stroke-opacity",1)
-	}
-	//when a mousemove event occurs then change the tooltip text on the map
+			.style("stroke-opacity",1);
+	};
+	//when a mousemove event occurs then change the tooltip text to match the map feature highlighted
 	var mousemove = function(d){
 		var i = attrArray.indexOf(expressed2)
 		toolTip.style("float","right")
 		toolTipText.html("<p><b>" + d.properties.NAME_ALT + ", " + d.properties.REGION + "<br>" + attrNames[i] + "(Mgal/day)/Total Population (thousands): </b>" + (d.properties[expressed2]/d.properties[expressed1]).toFixed(4) + "</p>")
 			.style("float","left")
-			.style("color","white")
-			//.style("left",(d3.mouse(this)[0]+10) + "px")
-			//.style("top",(d3.mouse(this)[1]-75) + "px")
+			.style("color","white");
 	}
-	//when a mousemove event occurs then change the tooltip text on the chart
+	//when a mousemove event occurs then change the tooltip text to match the dot highlighted
 	var mousemoveChart = function(d){
 		toolTip.style("float","right")
 		var i = attrArray.indexOf(expressed2)
@@ -552,6 +524,7 @@
 
 			return styleObject[styleName];
 		};
+		//also return the associated dot in the scatterplot back to its original style
 		var id = d.properties.FIPS
 		d3.selectAll(".dots." + id)
 			.style("stroke", function(){
@@ -597,6 +570,7 @@
 
 			return styleObject[styleName];
 		};
+		//also return the style of the associated highlighted map feature back to normal
 		var id = "US" + d.FIPS
 		d3.selectAll(".counties." + id)
 			.style("stroke", function(){
@@ -618,6 +592,6 @@
 
 			return styleObject[styleName];
 		};
-	}
+	};
 	
 }) ();

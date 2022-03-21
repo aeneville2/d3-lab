@@ -41,7 +41,6 @@
 }
 
 .counties {
-    /*fill: #fff;*/
     stroke: #000;
     stroke-width: 0.5px;
     stroke-opacity: 0.2;
@@ -54,17 +53,10 @@
     margin: 10px 20px 0 0;
     z-index:4;
 }
-.treeMapContainer {
-    background-color: rgba(128,128,128,0.2);
-    border: medium solid #999;
-    float: right;
-    margin: 10px 20px 0 0;
-    z-index:4;
-}
 
 .chartTitle {
     font-family: sans-serif;
-    font-size: 1.5em;
+    font-size: 0.75em;
     font-weight: bold;
 }
 
@@ -92,10 +84,6 @@
     fill: #999;
 }
 
-.chartTitle {
-    font-size: 0.75em;
-}
-
 .dropdown {
     position: absolute;
     top: 220px;
@@ -112,9 +100,11 @@
 option {
     font-weight: normal;
 }
+
 .legendBox{
     width: 100%
 }
+
 .legendContainer{
     position: relative;
     z-index: 10;
@@ -127,7 +117,6 @@ option {
     border: solid #000;
     border-width: 1px;
 	width: auto;
-    /*float: right;*/
     right:0;
     z-index: 15;
     text-align: center;
@@ -136,10 +125,6 @@ option {
 
 .toolTipText{
     background-color: #004b8d;
-}
-
-.zoomTooltip {
-    float: right;
 }
 
 .zoom {
