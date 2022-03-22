@@ -94,7 +94,7 @@
 
 	//begin script when window loads
 	window.onload = initialize();
-
+		
 	//the first function called once the html is loaded
 	function initialize(){
 		setMap();
@@ -138,12 +138,6 @@
 		//create group for the map elements
 		var mapG = map.append("g")
 			.attr("class","mapG");
-			/*.on("mouseover",function(d){
-				d3.selectAll(".zoomTooltip").style("opacity",1)
-			})
-			.on("mouseleave",function(d){
-				d3.selectAll(".zoomTooltip").style("opacity",0)
-			})*/
 
 		//create zoom buttons
 		//used https://www.d3indepth.com/zoom-and-pan and https://www.geeksforgeeks.org/d3-js-zoom-scaleby-function/ for help with coding!
@@ -381,8 +375,10 @@
 	
 	function createDropdown(csvData){
 		//add select element
-		var dropdown = d3.select("body")
-			.append("select")
+		var dropdownContainer = d3.select("body")
+			.append("div")
+			.attr("class","dropdownContainer");
+		var dropdown = dropdownContainer.append("select")
 			.attr("class","dropdown")
 			.on("change",function(){
 				changeAttribute(this.value, csvData)
@@ -429,13 +425,13 @@
 	function updateChart(csvData, attribute, colorScale){
 		//select all of the dots and update the values and fill color based on expressed attribute
 		d3.selectAll("circle")
+			.transition()
+			.duration(1000)
 			.attr("cx", function(d) {return x(d[expressed1]);})
 			.attr("cy", function(d) {return y(d[attribute]);})
 			.style("fill",function(d){
 				return choropleth(d, colorScale);
-			})
-			.transition()
-			.duration(1000);
+			});
 
 		//update the chart title based on the expressed y attribute
 		var name = attrArray.indexOf(attribute);
@@ -458,14 +454,14 @@
 		toolTip.style("opacity",1);
 		toolTipText.html(this.FIPS);
 		d3.select(this)
-			.style("stroke","blue")
+			.style("stroke","red")
 			.style("stroke-width","3px")
 			.style("stroke-opacity",1);
 
 		//select the corresponding dot in the scatterplot and highlight it
 		var id = d.properties.FIPS;
 		d3.selectAll(".dots." + id)
-			.style("stroke","blue")
+			.style("stroke","red")
 			.style("stroke-width","3px")
 			.style("stroke-opacity",1);
 	};
@@ -474,14 +470,14 @@
 		toolTip.style("opacity",1)
 		toolTipText.html(this.FIPS)
 		d3.select(this)
-			.style("stroke","blue")
+			.style("stroke","red")
 			.style("stroke-width","3px")
 			.style("stroke-opacity",1);
 
 		//select the corresponding county from the map and highlight it
 		var id = "US" + d.FIPS
 		d3.selectAll(".counties." + id)
-			.style("stroke","blue")
+			.style("stroke","red")
 			.style("stroke-width","3px")
 			.style("stroke-opacity",1);
 	};
